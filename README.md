@@ -12,20 +12,6 @@
 
 See **[install/README.md](install/README.md)** for details. After install, launch with **`Launch-Registral-Space-Analysis.bat`** (Windows) or **`Launch-Registral-Space-Analysis.command`** (macOS).
 
-## Copyright and use
-
-Copyright © 2026 Luís Raimundo. All rights reserved.
-
-This repository and its contents are proprietary research material. **No open-source licence is granted.** See **[COPYRIGHT.md](COPYRIGHT.md)**.
-
-**Contact:** [lmr.2020@outlook.pt](mailto:lmr.2020@outlook.pt)
-
-## Acknowledgements
-
-Developed with support from FCT and Universidade NOVA de Lisboa (DOI: [10.54499/2020.08817.BD](https://doi.org/10.54499/2020.08817.BD)). The author thanks Isabel Pires for her support. See **[ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md)**.
-
----
-
 Installable distribution name: **`registral-dispersion`** (version **0.3.0** — research software; pin `package_version` from JSON exports for reproducibility).
 
 **Scope:** symbolic-score-only registral dispersion (MusicXML, MXL, MIDI via music21). **Not** audio, loudness, timbre, orchestration, harmony, pitch-class analysis, or psychoacoustic perception.
@@ -286,3 +272,15 @@ MusicXML (`.xml`, `.musicxml`), MXL, MIDI (`.mid`, `.midi`); MXL zip safety chec
 * **Normalized** columns are **secondary**: they scale raw semitone metrics by the selected register width `R`; they are **not** perceptual “brightness”, orchestral spread, or density.
 * **occupancy_entropy** is **not** registral dispersion; it is an optional **bin-occupancy evenness** index (historically related to register-uniformity / **U** workflows) kept for comparison.
 * **Pitch-class set, harmony, and global tessitura** as musical conclusions are **out of scope**: the tool only aggregates **absolute MIDI pitch** heights in-band for the configured temporal slices.
+
+## Copyright and use
+
+Copyright © 2026 Luís Raimundo. All rights reserved.
+
+This repository and its contents are proprietary research material. **No open-source licence is granted.** See **[COPYRIGHT.md](COPYRIGHT.md)**.
+
+**Contact:** [lmr.2020@outlook.pt](mailto:lmr.2020@outlook.pt)
+
+## Acknowledgements
+
+Developed with support from FCT and Universidade NOVA de Lisboa (DOI: [10.54499/2020.08817.BD](https://doi.org/10.54499/2020.08817.BD)). The author thanks Isabel Pires for her support. See **[ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md)**.
