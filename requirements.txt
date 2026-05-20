@@ -1,0 +1,7 @@
+# Runtime deps mirror pyproject.toml (pip install -e . is preferred)
+numpy>=1.21
+music21>=9.0
+matplotlib>=3.5
+plotly>=6.1.1,<7
+kaleido>=1.0.0,<2
+gradio>=4.0

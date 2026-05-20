@@ -1,0 +1,77 @@
+{
+  "description": "Controlled synthetic fixtures for registral-dispersion regression (not empirical validation corpora).",
+  "corpus_status": "synthetic_fixture",
+  "package_version_target": "0.3.0",
+  "benchmarks": [
+    {
+      "benchmark_id": "narrow_cluster",
+      "file_path": "fixtures/narrow_cluster.musicxml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "description": "Compact semitone cluster (C4–D4).",
+      "expected_profile": "low_dispersion",
+      "include_in_regression": true,
+      "limitations": "Single part; no ties."
+    },
+    {
+      "benchmark_id": "wide_span",
+      "file_path": "fixtures/wide_span.musicxml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "description": "Wide vertical span (C3–C6).",
+      "expected_profile": "high_dispersion",
+      "include_in_regression": true,
+      "limitations": "Single chord sustained."
+    },
+    {
+      "benchmark_id": "octave_doublings",
+      "file_path": "fixtures/octave_doublings.musicxml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "description": "Two parts at C4 unison.",
+      "expected_profile": "profile_sensitive_pairwise",
+      "include_in_regression": true,
+      "limitations": "Tests occupied_space vs component_weighted contrast."
+    },
+    {
+      "benchmark_id": "register_shift",
+      "file_path": "fixtures/register_shift.musicxml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "description": "Low register then high register sequentially.",
+      "expected_profile": "temporal_shift",
+      "include_in_regression": true,
+      "limitations": "Event-boundary segmentation expected."
+    },
+    {
+      "benchmark_id": "rest_gap",
+      "file_path": "fixtures/rest_gap.musicxml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "description": "Sounding gap with empty interval.",
+      "expected_profile": "empty_interval_nan",
+      "include_in_regression": true,
+      "limitations": "Gap between attacks."
+    },
+    {
+      "benchmark_id": "tied_sustain",
+      "file_path": "fixtures/tied_sustain.musicxml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "description": "Tied C4 across two written noteheads.",
+      "expected_profile": "tie_policy_sensitive",
+      "include_in_regression": true,
+      "limitations": "merge_ties vs as_imported."
+    },
+    {
+      "benchmark_id": "chord_texture",
+      "file_path": "fixtures/chord_texture.musicxml",
+      "format": "musicxml",
+      "corpus_status": "synthetic_fixture",
+      "description": "Triad chord texture.",
+      "expected_profile": "moderate_dispersion",
+      "include_in_regression": true,
+      "limitations": "Single chord."
+    }
+  ]
+}
