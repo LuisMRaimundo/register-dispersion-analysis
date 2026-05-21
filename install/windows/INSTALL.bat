@@ -84,21 +84,9 @@ if errorlevel 1 (
 )
 
 echo.
-echo Creating launcher scripts...
-(
-echo @echo off
-echo cd /d "%%~dp0"
-echo call ".venv\Scripts\activate.bat"
-echo python -m registral_dispersion
-echo if errorlevel 1 pause
-) > "Launch-Registral-Space-Analysis.bat"
-
-(
-echo @echo off
-echo cd /d "%%~dp0"
-echo call ".venv\Scripts\activate.bat"
-echo python -m registral_dispersion summarize %%*
-) > "Summarize-Score.bat"
+echo Updating launcher scripts...
+copy /Y "install\launchers\Launch-Registral-Space-Analysis.bat" "Launch-Registral-Space-Analysis.bat" >nul
+copy /Y "install\launchers\Summarize-Score.bat" "Summarize-Score.bat" >nul
 
 echo.
 echo ============================================================

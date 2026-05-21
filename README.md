@@ -10,7 +10,7 @@
 |---------------|-------|-------|
 | Double-click **`install/windows/INSTALL.bat`** | Double-click **`install/macos/INSTALL.command`** | Run **`install/linux/install.sh`** |
 
-See **[install/README.md](install/README.md)** for details. After install, launch with **`Launch-Registral-Space-Analysis.bat`** (Windows) or **`Launch-Registral-Space-Analysis.command`** (macOS).
+See **[install/README.md](install/README.md)** for details. **Run the installer once first** (it creates `.venv`, which is not included in the clone). Then launch with **`Launch-Registral-Space-Analysis.bat`** (Windows) or **`Launch-Registral-Space-Analysis.command`** (macOS). If you open a launcher before installing, it will tell you to run the installer.
 
 Installable distribution name: **`registral-dispersion`** (version **0.3.0** — research software; pin `package_version` from JSON exports for reproducibility).
 

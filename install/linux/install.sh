@@ -64,21 +64,9 @@ source ".venv/bin/activate"
 python -m pip install --upgrade pip
 python -m pip install -e .
 
-cat > "launch-registral-space-analysis.sh" <<'LAUNCH'
-#!/bin/bash
-cd "$(dirname "$0")"
-source ".venv/bin/activate"
-python -m registral_dispersion
-LAUNCH
-chmod +x "launch-registral-space-analysis.sh"
-
-cat > "summarize-score.sh" <<'SUM'
-#!/bin/bash
-cd "$(dirname "$0")"
-source ".venv/bin/activate"
-python -m registral_dispersion summarize "$@"
-SUM
-chmod +x "summarize-score.sh"
+cp "install/launchers/launch-registral-space-analysis.sh" "launch-registral-space-analysis.sh"
+cp "install/launchers/summarize-score.sh" "summarize-score.sh"
+chmod +x "launch-registral-space-analysis.sh" "summarize-score.sh"
 
 echo ""
 echo "============================================================"
