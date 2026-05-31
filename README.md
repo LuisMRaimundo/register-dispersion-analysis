@@ -1,6 +1,6 @@
 # Registral Space Analysis (registral dispersion)
 
-**Repository:** [github.com/LuisMRaimundo/registral-space-analysis](https://github.com/LuisMRaimundo/registral-space-analysis)
+**Repository:** [github.com/LuisMRaimundo/register-dispersion-analysis](https://github.com/LuisMRaimundo/register-dispersion-analysis)
 
 **What this is:** a **symbolic-score–only** research tool that measures **registral dispersion**—how spread out or compact **active notated MIDI pitches** are inside a user band—using **registral span** and **mean pairwise registral distance** (semitones), with optional **occupancy entropy** (a separate, legacy-style occupancy-evenness index, **not** the main dispersion read).
 
@@ -176,6 +176,8 @@ python -m registral_dispersion concentration-map --score path/to/score.musicxml 
 Use `.svg` for vector output, or `.html` for an interactive Plotly figure (hover: time bin, MIDI, note name, intensity). Optional `--matrix-csv` / `--matrix-npz` export the **raw** count matrix (rows = MIDI pitch bins, columns = time bins) with metadata in comments / sidecar JSON inside NPZ.
 
 Programmatic entry point: `registral_dispersion.concentration_map.build_registral_concentration_matrix`, `make_registral_concentration_map`, and `run_concentration_map_to_files`.
+
+**Overlaying dispersion on the heatmap (Matplotlib):** pass `overlay_t` and series from `dispersion_overlay_from_results(analyze_score_output)` into `make_registral_concentration_map`. Times are quarterLength (window centers or event midpoints); the heatmap x-axis is `[time_bin_edges[0], time_bin_edges[-1]]`. For fixed-window dispersion, set `time_bin_size` equal to `time_step` so the grid matches the curve sampling.
 
 ## Python API
 

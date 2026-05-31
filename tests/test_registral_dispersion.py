@@ -284,6 +284,20 @@ class TestDispersionFormulas(unittest.TestCase):
         )
         self.assertTrue(np.isnan(RegistralDispersionAnalyzer.normalize_centroid_to_band(float("nan"), 60.0, 24.0)))
 
+    def test_occupancy_entropy_single_bin_not_negative_zero(self):
+        sc = stream.Score()
+        sc.insert(0, stream.Part())
+        sc.parts[0].insert(0, note.Note("C4", quarterLength=1.0))
+        an = RegistralDispersionAnalyzer.from_stream(sc, 60.0, 71.0, pitch_sampling_mode="event_instances")
+        for pitches in (
+            np.array([60.0]),
+            np.array([60.0, 60.0]),
+            np.array([60.0, 60.1]),
+        ):
+            u = an.compute_occupancy_entropy(pitches)
+            self.assertEqual(u, 0.0)
+            self.assertEqual(math.copysign(1.0, u), 1.0)
+
 
 class TestNotationalSamplingSynthetic(unittest.TestCase):
     """music21 streams: overlap windows, chords, unisons, repeats, empty register band."""

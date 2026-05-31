@@ -8,15 +8,18 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.figure import Figure
 from music21 import chord, note, stream
 
 from registral_dispersion.__main__ import main
+from registral_dispersion.analyzer import RegistralDispersionAnalyzer
 from registral_dispersion.concentration_map import (
     DISPLAY_NORMALIZATION_LOG1P,
     _apply_display_normalization,
     build_registral_concentration_matrix,
+    dispersion_overlay_from_results,
     make_registral_concentration_map,
     make_registral_concentration_map_plotly,
     run_concentration_map_to_files,
@@ -128,6 +131,49 @@ class TestConcentrationMatrix(unittest.TestCase):
         )
         fig = make_registral_concentration_map(b, title="Test map")
         self.assertIsInstance(fig, Figure)
+
+    def test_dispersion_overlay_xlim_matches_heatmap(self):
+        p = stream.Part()
+        p.insert(0, chord.Chord(["C4", "E4", "G4"], quarterLength=2.0))
+        sc = stream.Score()
+        sc.insert(0, p)
+        dt = 0.5
+        b = build_registral_concentration_matrix(
+            sc, 48.0, 72.0, time_bin_size=dt, concentration_mode="event_instances"
+        )
+        edges = np.asarray(b["time_bin_edges"], dtype=float)
+        an = RegistralDispersionAnalyzer.from_stream(sc, 48.0, 72.0, time_step=dt)
+        results = an.analyze_score(window_size=1.0)
+        ot, mp, sp = dispersion_overlay_from_results(results)
+        self.assertEqual(ot.size, mp.size)
+        fig = make_registral_concentration_map(
+            b,
+            overlay_t=ot,
+            overlay_mean_pairwise=mp,
+            overlay_registral_span=sp,
+        )
+        try:
+            ax = fig.axes[0]
+            self.assertAlmostEqual(ax.get_xlim()[0], float(edges[0]))
+            self.assertAlmostEqual(ax.get_xlim()[1], float(edges[-1]))
+            overlay_axes = [a for a in fig.axes if a.get_lines()]
+            self.assertGreaterEqual(len(overlay_axes), 1)
+            for oax in overlay_axes:
+                self.assertAlmostEqual(oax.get_xlim()[0], float(edges[0]))
+                self.assertAlmostEqual(oax.get_xlim()[1], float(edges[-1]))
+        finally:
+            plt.close(fig)
+
+    def test_dispersion_overlay_from_results_keys(self):
+        results = {
+            "t": [0.0, 1.0],
+            "mean_pairwise_registral_distance": [1.0, 2.0],
+            "registral_span": [3.0, 4.0],
+        }
+        t, mp, sp = dispersion_overlay_from_results(results)
+        np.testing.assert_array_equal(t, [0.0, 1.0])
+        np.testing.assert_array_equal(mp, [1.0, 2.0])
+        np.testing.assert_array_equal(sp, [3.0, 4.0])
 
     def test_log1p_display_normalization(self):
         m = np.array([[0.0, 1.0, 10.0]], dtype=float)

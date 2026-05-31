@@ -163,6 +163,35 @@ def normalize_display_normalization(value: str | None) -> str:
     return DEFAULT_DISPLAY_NORMALIZATION
 
 
+def dispersion_overlay_from_results(
+    results: dict[str, Any],
+    *,
+    use_normalized: bool = False,
+) -> tuple[np.ndarray, np.ndarray | None, np.ndarray | None]:
+    """
+    Build ``(overlay_t, mean_pairwise, registral_span)`` from :meth:`RegistralDispersionAnalyzer.analyze_score`
+    output for :func:`make_registral_concentration_map`.
+
+    **Temporal alignment:** ``overlay_t`` is ``results['t']`` in quarterLength — window centers for
+    ``fixed_window``, interval midpoints for ``event_boundaries``. The heatmap x-axis spans
+    ``time_bin_edges[0]`` … ``time_bin_edges[-1]`` (half-open bin grid). Use the same score duration
+    and prefer ``time_bin_size == time_step`` when overlaying fixed-window dispersion on a heatmap.
+    """
+    t = np.asarray(results["t"], dtype=float)
+    if use_normalized:
+        mp_key, sp_key = (
+            "normalized_mean_pairwise_registral_distance",
+            "normalized_registral_span",
+        )
+    else:
+        mp_key, sp_key = "mean_pairwise_registral_distance", "registral_span"
+    mp = results.get(mp_key)
+    sp = results.get(sp_key)
+    mean_pairwise = None if mp is None else np.asarray(mp, dtype=float)
+    registral_span = None if sp is None else np.asarray(sp, dtype=float)
+    return t, mean_pairwise, registral_span
+
+
 def _apply_display_normalization(matrix: np.ndarray, how: str) -> tuple[np.ndarray, str]:
     """Return ``(display_matrix, colorbar_label_suffix)`` for visualization only."""
     m = np.asarray(matrix, dtype=float)
@@ -304,6 +333,12 @@ def make_registral_concentration_map(
 ) -> Figure:
     """
     Publication-style Matplotlib heatmap: dark gallery canvas, ember palette, octave guides.
+
+    **Dispersion overlay (optional):** pass ``overlay_t`` in quarterLength together with semitone (or
+    normalized) series of equal length. Time is **not** resampled: points plot at ``overlay_t`` on the
+    heatmap x-axis ``[time_bin_edges[0], time_bin_edges[-1]]``. Use
+    :func:`dispersion_overlay_from_results` to extract arrays from analysis output. Mismatched lengths
+    skip the affected series; the shared x-axis is clipped to the heatmap extent after plotting.
     """
     mat = np.asarray(bundle["matrix"], dtype=float)
     mids = np.asarray(bundle["pitch_midi"], dtype=int)
@@ -374,34 +409,51 @@ def make_registral_concentration_map(
     if has_overlay:
         assert overlay_t is not None
         ot = np.asarray(overlay_t, dtype=float)
+        x_lo, x_hi = float(edges[0]), float(edges[-1])
         ax2 = cast(Axes, ax.twinx())
+        plotted = False
+
+        def _plot_overlay(y: np.ndarray, *, color: str, linestyle: str, label: str, lw: float) -> None:
+            nonlocal plotted
+            if y.size != ot.size:
+                return
+            mask = np.isfinite(y) & np.isfinite(ot)
+            if not np.any(mask):
+                return
+            ax2.plot(
+                ot[mask],
+                y[mask],
+                color=color,
+                linestyle=linestyle,
+                linewidth=lw,
+                alpha=0.9 if linestyle == "-" else 0.85,
+                label=label,
+            )
+            plotted = True
+
         if overlay_mean_pairwise is not None:
-            y1 = np.asarray(overlay_mean_pairwise, dtype=float)
-            if y1.size == ot.size:
-                ax2.plot(
-                    ot,
-                    y1,
-                    color=ACCENT_GOLD,
-                    linewidth=1.6,
-                    alpha=0.9,
-                    label="Mean pairwise distance",
-                )
+            _plot_overlay(
+                np.asarray(overlay_mean_pairwise, dtype=float),
+                color=ACCENT_GOLD,
+                linestyle="-",
+                label="Mean pairwise distance",
+                lw=1.6,
+            )
         if overlay_registral_span is not None:
-            y2 = np.asarray(overlay_registral_span, dtype=float)
-            if y2.size == ot.size:
-                ax2.plot(
-                    ot,
-                    y2,
-                    color="#6eb5d9",
-                    linestyle="--",
-                    linewidth=1.4,
-                    alpha=0.85,
-                    label="Registral span",
-                )
-        ax2.set_ylabel("Dispersion (semitones)", fontsize=9, color=TEXT_MUTED)
-        ax2.tick_params(axis="y", labelsize=8, colors=TEXT_MUTED)
-        ax2.spines[:].set_visible(False)
-        ax2.legend(loc="upper right", fontsize=7, framealpha=0.15, facecolor=PANEL_BG, edgecolor="none")
+            _plot_overlay(
+                np.asarray(overlay_registral_span, dtype=float),
+                color="#6eb5d9",
+                linestyle="--",
+                label="Registral span",
+                lw=1.4,
+            )
+        if plotted:
+            ax.set_xlim(x_lo, x_hi)
+            ax2.set_xlim(x_lo, x_hi)
+            ax2.set_ylabel("Dispersion (semitones)", fontsize=9, color=TEXT_MUTED)
+            ax2.tick_params(axis="y", labelsize=8, colors=TEXT_MUTED)
+            ax2.spines[:].set_visible(False)
+            ax2.legend(loc="upper right", fontsize=7, framealpha=0.15, facecolor=PANEL_BG, edgecolor="none")
 
     fig.tight_layout(pad=1.2)
     return fig

@@ -6,4 +6,4 @@ This repository and its contents are proprietary research material. **No open-so
 
 **Contact:** [lmr.2020@outlook.pt](mailto:lmr.2020@outlook.pt)
 
-Repository: [https://github.com/LuisMRaimundo/registral-space-analysis](https://github.com/LuisMRaimundo/registral-space-analysis)
+Repository: [https://github.com/LuisMRaimundo/register-dispersion-analysis](https://github.com/LuisMRaimundo/register-dispersion-analysis)

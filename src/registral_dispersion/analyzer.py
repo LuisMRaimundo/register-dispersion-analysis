@@ -285,7 +285,8 @@ class RegistralDispersionAnalyzer:
         if self._max_entropy <= 0:
             return 0.0
         U = entropy / self._max_entropy
-        return float(np.clip(U, 0.0, 1.0))
+        # max(..., 0.0) avoids -0.0 from np.clip on floating-point underflow
+        return max(0.0, float(np.clip(U, 0.0, 1.0)))
 
     def _append_row(
         self,
