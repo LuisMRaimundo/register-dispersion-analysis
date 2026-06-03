@@ -42,6 +42,17 @@ The **default** research stance is **`analysis_profile: occupied_space`** (impli
 | Primary outputs | **Raw semitones** | **`dispersion_degree`** (canonical; numerically = `registral_span`), `mean_pairwise_registral_distance` (supplementary). |
 | Secondary outputs | **`normalized_*`** | Raw ÷ `R = register_high_midi − register_low_midi`. |
 
+### Plotting vs exports vs interpretation (avoid mixing these)
+
+| Layer | Primary | Secondary / optional |
+|-------|---------|----------------------|
+| **UI / batch PNG curve** | **`dispersion_degree`** (= `registral_span`, max − min) | Mean pairwise distance (checkbox overlay; secondary y-axis) |
+| **CSV / JSON canonical field** | **`dispersion_degree`** | `mean_pairwise_registral_distance`, centroid, std, `occupancy_entropy` |
+| **Research read (`occupied_space`)** | `registral_span` / `dispersion_degree` | Mean pairwise (often coincides under `unique_pitch_heights`) |
+| **Research read (`component_weighted`)** | Mean pairwise distance (multiplicity matters) | Span/degree still exported and plotted as the main curve unless you overlay pairwise |
+
+The **plotted** primary curve always follows the code in `plotting.py` (`dispersion_degree`). Profile tables below describe **how to interpret** columns, not which line is drawn by default.
+
 ## Temporal observation modes
 
 The **same** registral formulas (`registral_span`, `mean_pairwise_registral_distance`, optional `occupancy_entropy`, and normalized counterparts) are applied to the set of pitches that are **active** in each temporal support; only the **sampling of time** changes.
@@ -73,7 +84,7 @@ Advised parameter sets for static vs moving workflows: **[docs/PARAMETERIZATION_
 
 ### Raw vs normalized (secondary)
 
-**Raw** `registral_span` and `mean_pairwise_registral_distance` are in **semitones** and remain the **primary** outputs.
+**Raw** `dispersion_degree`, `registral_span`, and `mean_pairwise_registral_distance` are all exported in **semitones** on every row. Only **`dispersion_degree`** is the **canonical** field and the **default plotted** series; pairwise is supplementary in exports and optional in figures.
 
 **Normalized** columns (secondary) scale raw values by the analytical register width
 

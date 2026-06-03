@@ -1,7 +1,8 @@
 """
-Run **registral dispersion** analysis on a symbolic score (primary: span + mean pairwise distance).
+Run **registral dispersion** analysis on a symbolic score.
 
-Returns structured dicts (no UI). Used by the Gradio app, CLI, and tests.
+Canonical per-row metric: ``dispersion_degree`` (= registral span). Mean pairwise distance is
+exported and optionally plotted as an overlay. Used by the Gradio app, CLI, and tests.
 """
 
 from __future__ import annotations
