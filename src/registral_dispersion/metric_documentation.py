@@ -16,8 +16,9 @@ Chord members contribute as separate MIDI heights before optional collapse. All 
 * ``unique_pitch_heights`` — collapse to distinct MIDI pitch numbers inside the window before span,
   pairwise distance, and occupancy entropy.
 
-**Ties:** no tie-specific deduplication; each ``Note``/``Chord`` object in the flat stream that overlaps
-the window contributes according to the rules above (behavior follows the importer and file).
+**Ties:** ``tie_policy=as_imported`` (default) preserves importer structure; ``merge_ties`` runs
+``stripTies()`` before listing. Each overlapping ``Note``/``Chord`` object contributes according to the
+rules above.
 
 **Edge-case convention (all window metrics):**
 

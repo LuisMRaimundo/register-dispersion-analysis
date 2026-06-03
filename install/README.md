@@ -19,6 +19,6 @@ Installers will:
 
 **One-number summary (optional):** use `Summarize-Score.bat` (Windows) or `summarize-score.sh` (macOS/Linux) with `--score yourfile.musicxml`.
 
-See the main [README](../README.md) for research parameters and limitations.
+See the main [README](../README.md) for research parameters and limitations, and [docs/PARAMETERIZATION_GUIDE.md](../docs/PARAMETERIZATION_GUIDE.md) for advised static vs moving workflows.
 
 Copyright © 2026 Luís Raimundo. See [COPYRIGHT.md](../COPYRIGHT.md).

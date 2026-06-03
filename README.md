@@ -39,7 +39,7 @@ The **default** research stance is **`analysis_profile: occupied_space`** (impli
 | `pitch_sampling_mode` (if not overridden) | **`unique_pitch_heights`** | Implied by `occupied_space` via `resolve_registral_dispersion_params`. |
 | `observation_mode` | **`fixed_window`** | Moving windows: `time_step` + `window_size`. |
 | Register band | **A0 to C8 (full notated range)** preset in UI | Parsed to MIDI ps; **results depend on this band**. |
-| Primary outputs | **Raw semitones** | `registral_span`, `mean_pairwise_registral_distance`. |
+| Primary outputs | **Raw semitones** | **`dispersion_degree`** (canonical; numerically = `registral_span`), `mean_pairwise_registral_distance` (supplementary). |
 | Secondary outputs | **`normalized_*`** | Raw ÷ `R = register_high_midi − register_low_midi`. |
 
 ## Temporal observation modes
@@ -61,13 +61,15 @@ Exports record **`observation_mode`** and per-row **`interval_start`**, **`inter
 
 On **absolute MIDI pitch** values for notes/chord tones that are **active** in the temporal support (moving window or event interval) and lie inside the user band `[register_low, register_high]` (not pitch-class reduction):
 
-1. **registral_span** — `D_span = max(pitches) - min(pitches)` (semitones).
+1. **dispersion_degree** / **registral_span** — canonical metric `D_span = max(pitches) - min(pitches)` (semitones); both names refer to the same value in exports.
 2. **mean_pairwise_registral_distance** — mean absolute distance over **unordered** distinct pitch pairs:  
    `D_pairwise = (2 / (n(n-1))) * sum_{i<j} |p_i - p_j|` (same as the arithmetic mean of `|p_i - p_j|` over all `i < j`; semitones).
 3. **registral_centroid** — `mean(pitches)` in MIDI semitones (where the active material sits in register).
 4. **registral_std** — population standard deviation of `pitches` (semitones); tight clusters vs wide spread **around the mean** (complements span and pairwise distance).
 
-**Main curve** in the UI and batch PNG defaults to **mean pairwise registral distance**. **Registral span** can be overlaid (secondary axis). **Centroid** and **std** appear in CSV/JSON exports and the text summary (not plotted by default). Span and pairwise distance are **transposition-invariant**; raw centroid is **not** (it tracks absolute tessitura).
+**Main curve** in the UI and batch PNG defaults to **`dispersion_degree`** (same numbers as **registral span**). **Mean pairwise registral distance** can be overlaid on a secondary axis (UI: “Overlay mean pairwise distance”; CLI: `--plot-pairwise` or deprecated `--plot-span`). **Centroid** and **std** appear in CSV/JSON exports and the text summary (not plotted by default). Span/degree and pairwise distance are **transposition-invariant**; raw centroid is **not** (it tracks absolute tessitura).
+
+Advised parameter sets for static vs moving workflows: **[docs/PARAMETERIZATION_GUIDE.md](docs/PARAMETERIZATION_GUIDE.md)**.
 
 ### Raw vs normalized (secondary)
 
@@ -83,7 +85,7 @@ so that `normalized_registral_span = registral_span / R`, `normalized_mean_pairw
 
 ## Methodological note
 
-Registral dispersion is operationalized here as the vertical opening/compression of active notated components in semitone space. The primary descriptors are occupied registral span and mean pairwise registral distance. These descriptors are transposition-invariant and independent of absolute tessitura. They do not measure pitch-class content, harmony, density, acoustic brightness, or orchestration. The previous entropy-based register uniformity metric, if retained as `occupancy_entropy`, measures pitch-bin occupancy evenness and is conceptually distinct.
+Registral dispersion is operationalized here as the vertical opening/compression of active notated components in semitone space. The **canonical** per-row metric is **`dispersion_degree`** (= `registral_span` = max − min in semitones). **Mean pairwise registral distance** is a supplementary descriptor (especially informative under `component_weighted` / `event_instances`). Span/degree and pairwise distance are transposition-invariant in the sense that they depend only on relative MIDI distances within each temporal support; they do not measure pitch-class content, harmony, density, acoustic brightness, or orchestration. **Registral centroid** tracks absolute tessitura. The previous entropy-based register uniformity metric, if retained as `occupancy_entropy`, measures pitch-bin occupancy evenness and is conceptually distinct.
 
 ## Edge cases
 
@@ -101,14 +103,14 @@ For **`fixed_window`**, `t_lo = t − w/2` and `t_hi = t + w/2` (window center `
 So **sustained** notes count in every overlapped window, not only when an attack falls inside the window.
 
 * **Chords:** each pitch in `Chord.pitches` that lies in the register band is a separate component before optional deduplication.
-* **Ties:** there is no tie-specific merge. The flat stream may be one long `Note` or several tied segments depending on the file and importer; **each overlapping `Note`/`Chord` object** contributes once per object.
+* **Ties:** default **`tie_policy=as_imported`** (no merge). Use **`tie_policy=merge_ties`** to run music21 `stripTies()` before listing events. Otherwise the flat stream may be one long `Note` or several tied segments depending on the file and importer; **each overlapping `Note`/`Chord` object** contributes once per object.
 * **`analysis_profile`** (default **`occupied_space`**) sets the implied **`pitch_sampling_mode`** unless you pass an explicit `pitch_sampling_mode` key (see precedence above).
 * **`pitch_sampling_mode`** when derived from profile:
 
   * **`event_instances`** (`component_weighted`) — keep every in-register MIDI value contributed by overlapping events (chord tones separately; **duplicated unisons across parts** and **repeated noteheads** count as multiple components).
   * **`unique_pitch_heights`** (`occupied_space`) — collapse to **distinct MIDI pitch numbers** within the window, then compute span, pairwise mean, and occupancy entropy. `active_note_count` is the length **after** this collapse.
 
-Exports (CSV comment lines and JSON) record **`analysis_profile`**, **`pitch_sampling_mode`**, **`pitch_sampling_source`**, **`observation_mode`**, register bounds and width, **`normalization_reference`**, explicit **formula / methodological** strings, and **`package_version`** / **`tool_role`** (JSON schema ≥ 1.5) for reproducibility.
+Exports (CSV comment lines and JSON) record **`analysis_profile`**, **`pitch_sampling_mode`**, **`pitch_sampling_source`**, **`observation_mode`**, register bounds and width, **`normalization_reference`**, explicit **formula / methodological** strings, and **`package_version`** / **`tool_role`** (JSON schema **1.8**) for reproducibility.
 
 ## Install
 
@@ -128,7 +130,7 @@ python -m registral_dispersion
 
 The UI has two tabs:
 
-1. **Dispersion curves** — registral span, mean pairwise distance, optional entropy (default profile: **occupied_space**).
+1. **Dispersion curves** — **`dispersion_degree`** (primary), optional mean pairwise overlay and occupancy entropy (default profile: **occupied_space**). Presets: static vertical, moving fragment, global summary.
 2. **Concentration heatmap** — pitch–time map where **warmer/brighter cells = more notated activity** at that register and time.
 
 ## Registral concentration map
@@ -152,7 +154,7 @@ python -m registral_dispersion analyze --score path/to/score.musicxml --analysis
 python -m registral_dispersion analyze --score path/to/score.musicxml --observation-mode event_boundaries --out-dir ./out
 ```
 
-Options: `--register-low`, `--register-high`, `--time-step`, `--window-size`, `--prefix`, `--plot-span`, `--plot-entropy`, `--plot-normalized` (plot y-axis in 1/R units instead of semitones), `--analysis-profile` (`occupied_space` | `component_weighted`), optional `--pitch-sampling` (overrides profile if set), `--observation-mode` (`fixed_window` | `event_boundaries`). PNG is written next to CSV/JSON when using **`analyze`**.
+Options: `--register-low`, `--register-high`, `--time-step`, `--window-size`, `--prefix`, `--plot-pairwise` (or deprecated `--plot-span`), `--plot-entropy`, `--plot-normalized` (y-axis in 1/R units), `--tie-policy` (`as_imported` | `merge_ties`), `--analysis-profile` (`occupied_space` | `component_weighted`), optional `--pitch-sampling` (overrides profile if set), `--observation-mode` (`fixed_window` | `event_boundaries`). PNG primary curve = **`dispersion_degree`**; pairwise is overlay only.
 
 ## Batch export (dispersion)
 

@@ -11,6 +11,7 @@
 - Separate **global summary CSV** export on batch `analyze`.
 - **Benchmarks/** synthetic fixtures with frozen summarize outputs (regression only).
 - No change to per-row dispersion **formulas**; defaults preserved (`occupied_space`, `fixed_window` for full analysis).
+- Documentation aligned with implementation: primary plotted/exported canonical metric **`dispersion_degree`**; JSON schema **1.8**; `tie_policy` in README and parameterization guide.
 
 ## 0.2.1
 

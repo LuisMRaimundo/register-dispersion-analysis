@@ -62,8 +62,8 @@ Each row describes a **fixed set of sounding pitches** — no moving-window blur
 
 | Metric | Role in static vertical reading |
 |--------|----------------------------------|
-| **`registral_span`** | **Primary** — vertical opening (semitones) of occupied heights |
-| **`mean_pairwise_registral_distance`** | Secondary — mean pair separation (can diverge from span if clustering is uneven) |
+| **`dispersion_degree`** / **`registral_span`** | **Primary** — canonical vertical opening (semitones); identical values |
+| **`mean_pairwise_registral_distance`** | Secondary — mean pair separation (can diverge from span/degree if clustering is uneven) |
 | **`registral_centroid`** | Where the vertical mass sits (absolute tessitura) |
 | **`registral_std`** | Tight vs loose clustering around the centroid |
 | **`normalized_registral_span`** | Compare segments when register band is fixed |
@@ -115,7 +115,7 @@ This yields essentially **one window** covering the full sounding span. Less pre
 - [ ] Analysis profile: **occupied_space**
 - [ ] Pitch sampling override: **(from profile)**
 - [ ] Include concentration heatmap: **checked**
-- [ ] Overlay registral span: optional (on dispersion plot — less central in event mode)
+- [ ] Overlay mean pairwise distance: optional (secondary axis; primary curve is `dispersion_degree`)
 - [ ] Plot normalized y-axis: **off** (prefer raw semitones for publication)
 
 ### CLI (static vertical aggregate)
@@ -129,7 +129,7 @@ python -m registral_dispersion analyze ^
   --register-high C8 ^
   --observation-mode event_boundaries ^
   --analysis-profile occupied_space ^
-  --plot-span
+  --plot-pairwise
 ```
 
 Heatmap (separate export):
@@ -207,17 +207,17 @@ Sliding windows produce a **continuous (sampled) trajectory** of vertical openin
 
 | Metric | Role in temporal reading |
 |--------|---------------------------|
-| **`mean_pairwise_registral_distance`** | **Primary curve** (UI default) — smoothed registral spread trajectory |
-| **`registral_span`** | Overlay / secondary — extremal opening (peaks at registral expansion) |
+| **`dispersion_degree`** / **`registral_span`** | **Primary curve** (UI and PNG default) — smoothed vertical opening trajectory |
+| **`mean_pairwise_registral_distance`** | Optional overlay — mean pair separation (enable when doublings matter or under `component_weighted`) |
 | **`registral_centroid`** | Tessitura drift over time (export from CSV) |
 | **`registral_std`** | Cluster tightness evolution |
-| **`normalized_mean_pairwise_registral_distance`** | Compare scores with same band |
+| **`normalized_dispersion_degree`** | Compare scores with same band |
 
 ### Plot options (moving fragment)
 
 | UI option | Advised |
 |-----------|---------|
-| Overlay registral span | **On** — see expansion vs mean separation |
+| Overlay mean pairwise distance | **On** when comparing span vs mean separation; **off** for minimal occupied-space curves |
 | Show occupancy entropy | **Off** by default — enable only for bin-evenness comparison |
 | Plot normalized y-axis | **Off** for single-score study; **On** for cross-score corpus |
 | Interactive plots | **On** (Plotly) |
@@ -242,7 +242,7 @@ Aligning heatmap bins with dispersion grid makes visual comparison straightforwa
 - [ ] Window size: **4.0**
 - [ ] Analysis profile: **occupied_space**
 - [ ] Include concentration heatmap: **checked**
-- [ ] Overlay registral span: **checked**
+- [ ] Overlay mean pairwise distance: optional (primary = `dispersion_degree`)
 - [ ] Show occupancy entropy: **unchecked** (unless studying uniformity)
 
 ### CLI (moving fragment)
@@ -258,7 +258,7 @@ python -m registral_dispersion analyze ^
   --time-step 0.25 ^
   --window-size 4.0 ^
   --analysis-profile occupied_space ^
-  --plot-span
+  --plot-pairwise
 ```
 
 Combined workflow (dispersion + heatmap via UI): click **Run analysis** once with the settings above.
@@ -278,7 +278,7 @@ params_moving = {
 }
 
 out = run_registral_dispersion_analysis("score.musicxml", params_moving)
-# Primary curve: out["results"]["mean_pairwise_registral_distance"] vs out["results"]["t"]
+# Primary curve: out["results"]["dispersion_degree"] vs out["results"]["t"]
 ```
 
 ---
@@ -289,7 +289,7 @@ out = run_registral_dispersion_analysis("score.musicxml", params_moving)
 |---|------------------------------|---------------------|
 | **Observation** | `event_boundaries` | `fixed_window` |
 | **Time logic** | One row per **constant pitch set** | One row per **sliding window** |
-| **Primary metric** | `registral_span` | `mean_pairwise_registral_distance` (curve) |
+| **Primary metric** | `dispersion_degree` / `registral_span` | `dispersion_degree` (curve); pairwise optional overlay |
 | **Profile** | `occupied_space` | `occupied_space` |
 | **Register** | A0–C8 | A0–C8 |
 | **time_step** | 0.25 (inert) | **0.25** (active grid) |
@@ -355,4 +355,4 @@ Then treat **`mean_pairwise_registral_distance`** as primary in both setups.
 
 ---
 
-*Document version: 2026-05-20 — matches registral-dispersion 0.3.0.*
+*Document version: 2026-06-03 — matches registral-dispersion 0.3.0 (plotting: primary `dispersion_degree`; JSON schema 1.8).*

@@ -68,9 +68,10 @@ class RegistralDispersionAnalyzer:
     * **``pitch_sampling_mode``:** ``event_instances`` keeps every in-register MIDI contribution as listed
       (repeated heights, duplicated unisons across parts, repeated noteheads all count separately).
       ``unique_pitch_heights`` collapses to distinct MIDI pitch numbers within the window before metrics.
-    * **Ties:** no tie-specific merge is applied. The flat stream may contain one long ``Note`` or several
-      tied segments depending on the file and music21 import; each overlapping object contributes according
-      to the rules above (written noteheads as separate objects may each contribute once).
+    * **Ties:** controlled by ``tie_policy`` (default ``as_imported``: no merge). ``merge_ties`` runs
+      music21 ``stripTies()`` before event listing. Otherwise the flat stream may contain one long ``Note``
+      or several tied segments depending on the file and import; each overlapping object contributes
+      according to the rules above.
     """
 
     def __init__(

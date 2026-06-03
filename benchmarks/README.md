@@ -8,7 +8,7 @@ These are **not** empirical validation corpora, analyst-labelled datasets, or pe
 
 - `manifest.json` — fixture catalogue and metadata
 - `fixtures/` — minimal MusicXML scores (legal to redistribute)
-- `frozen_outputs/` — JSON summaries generated with pinned default summarize parameters
+- `frozen_outputs/` — JSON summaries generated with pinned default summarize parameters (`schema_version` 1.8)
 - `scripts/generate_frozen_outputs.py` — regenerate frozen outputs after intentional changes
 - `scripts/compare_frozen_outputs.py` — compare current summarize output to frozen baselines
 
