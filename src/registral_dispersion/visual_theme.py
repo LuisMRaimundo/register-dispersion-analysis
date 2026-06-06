@@ -45,7 +45,7 @@ _EMBER_STOPS: list[tuple[float, str]] = [
 ]
 
 PLOTLY_EMBER_SCALE: list[list[float | str]] = [
-    [pos, col] for pos, col in _EMBER_STOPS  # type: ignore[misc]
+    [pos, col] for pos, col in _EMBER_STOPS
 ]
 
 FONT_SERIF = "Georgia, 'Palatino Linotype', 'Times New Roman', serif"
