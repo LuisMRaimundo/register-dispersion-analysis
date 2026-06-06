@@ -46,7 +46,7 @@ def _package_version() -> str:
         return "unknown"
 
 
-def _export_provenance() -> dict[str, str]:
+def _export_provenance() -> dict[str, str | bool]:
     """Software identity for reproducible exports (JSON; mirrored in CSV comments where applicable)."""
     return {
         "package_name": "registral-dispersion",
