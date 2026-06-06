@@ -2,7 +2,7 @@
 
 Controlled **synthetic fixtures** for regression and frozen-output comparison.
 
-These are **not** empirical validation corpora, analyst-labelled datasets, or perceptual benchmarks.
+These are **not** empirical validation corpora, analyst-labelled datasets, or perceptual benchmarks. Metric semantics: [../docs/METRIC_SEMANTICS.md](../docs/METRIC_SEMANTICS.md).
 
 ## Layout
 

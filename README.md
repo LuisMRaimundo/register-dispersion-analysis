@@ -14,7 +14,7 @@ See **[install/README.md](install/README.md)** for details. **Run the installer 
 
 Installable distribution name: **`registral-dispersion`** (version **0.3.0** — research software; pin `package_version` from JSON exports for reproducibility).
 
-**Scope:** symbolic-score-only registral dispersion (MusicXML, MXL, MIDI via music21). **Not** audio, loudness, timbre, orchestration, harmony, pitch-class analysis, or psychoacoustic perception.
+**Scope:** symbolic-score-only registral dispersion (MusicXML, MXL, MIDI via music21). **Not** audio, loudness, timbre, orchestration, harmony, pitch-class analysis, or psychoacoustic perception. For precise definitions, formulas, and interpretive limits of each metric, see **[docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md)**.
 
 Analysis proceeds along the score using an explicit **temporal observation mode** (default: **fixed_window**, i.e. moving windows on a regular time grid).
 
@@ -92,11 +92,11 @@ Advised parameter sets for static vs moving workflows: **[docs/PARAMETERIZATION_
 
 so that `normalized_registral_span = registral_span / R`, `normalized_mean_pairwise_registral_distance = mean_pairwise_registral_distance / R`, `normalized_registral_centroid = (registral_centroid - register_low_midi) / R`, and `normalized_registral_std = registral_std / R`. They are useful for comparing runs with **different** register bounds. They are **not** perceptual dispersion, acoustic brightness, or orchestral spread—only semitone distances (or band-relative centroid position) divided by the **selected** band width (`normalization_reference: selected_register_bounds` in exports). `R` must be strictly positive (equal bounds raise a validation error).
 
-**occupancy_entropy** (same numerical recipe as the former **register uniformity U**): normalized Shannon entropy of **semitone-bin occupancy** within the register band. It measures **evenness of bin occupancy**, **not** vertical opening; it is **conceptually distinct** from `registral_span` and `mean_pairwise_registral_distance`.
+**occupancy_entropy** (same numerical recipe as the former **register uniformity U**): normalized Shannon entropy of **semitone-bin occupancy** within the register band (natural log, base **e**; normalized by `log(n_bins)`). It measures **evenness of bin occupancy**, **not** vertical opening; it is **conceptually distinct** from `registral_span` and `mean_pairwise_registral_distance`. See **[docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md)** §5.
 
 ## Methodological note
 
-Registral dispersion is operationalized here as the vertical opening/compression of active notated components in semitone space. The **canonical** per-row metric is **`dispersion_degree`** (= `registral_span` = max − min in semitones). **Mean pairwise registral distance** is a supplementary descriptor (especially informative under `component_weighted` / `event_instances`). Span/degree and pairwise distance are transposition-invariant in the sense that they depend only on relative MIDI distances within each temporal support; they do not measure pitch-class content, harmony, density, acoustic brightness, or orchestration. **Registral centroid** tracks absolute tessitura. The previous entropy-based register uniformity metric, if retained as `occupancy_entropy`, measures pitch-bin occupancy evenness and is conceptually distinct.
+Registral dispersion is operationalized here as the vertical opening/compression of active notated components in semitone space. The **canonical** per-row metric is **`dispersion_degree`** (= `registral_span` = max − min in semitones). **Mean pairwise registral distance** is a supplementary descriptor (especially informative under `component_weighted` / `event_instances`). Span/degree and pairwise distance are transposition-invariant in the sense that they depend only on relative MIDI distances within each temporal support; they do not measure pitch-class content, harmony, acoustic brightness, or orchestration. **Registral centroid** tracks absolute tessitura. The previous entropy-based register uniformity metric, if retained as `occupancy_entropy`, measures pitch-bin occupancy evenness and is conceptually distinct. **Full metric semantics:** [docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md).
 
 ## Edge cases
 
@@ -146,7 +146,7 @@ The UI has two tabs:
 
 ## Registral concentration map
 
-**Complementary visualization only:** a **pitch–time heatmap** of **symbolic notational occupancy** — where active **notated** pitch components fall in register over score time (quarterLength). **Warmer / brighter color** means **more overlapping notated components** at that MIDI height in that time bin. Default color scaling uses **`log1p_counts`** so populated regions stand out without flattening sparse passages. This is **not** a registral-dispersion metric, **not** audio energy, loudness, or orchestration.
+**Complementary visualization only:** a **pitch–time heatmap** of **symbolic notational occupancy** — where active **notated** pitch components fall in register over score time (quarterLength). **Warmer / brighter color** means **more overlapping notated components** at that MIDI height in that time bin (not acoustic loudness). Default color scaling uses **`log1p_counts`** so populated regions stand out without flattening sparse passages. This is **not** a registral-dispersion metric, **not** audio energy, loudness, or orchestration. Details: **[docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md)** §7.
 
 ```bash
 python -m registral_dispersion analyze --score path/to/score.musicxml --out-dir ./out
@@ -284,9 +284,12 @@ MusicXML (`.xml`, `.musicxml`), MXL, MIDI (`.mid`, `.midi`); MXL zip safety chec
 * **No dynamics**, **no orchestration weighting**, **no automatic layer or staff detection**, **no psychoacoustic models**.
 * **Tie behavior:** default **`tie_policy=as_imported`**. Use **`merge_ties`** to collapse tied segments via music21 `stripTies()` before analysis; record `tie_policy` in exports.
 * **Numerical results depend on** the chosen **register band**, **`analysis_profile` / `pitch_sampling_mode`**, and **`observation_mode`** (fixed-window grid vs event-boundary segmentation).
-* **Normalized** columns are **secondary**: they scale raw semitone metrics by the selected register width `R`; they are **not** perceptual “brightness”, orchestral spread, or density.
+* **Normalized** columns are **secondary**: they scale raw semitone metrics by the selected register width `R`; they are **not** perceptual “brightness”, orchestral spread, or acoustic density.
 * **occupancy_entropy** is **not** registral dispersion; it is an optional **bin-occupancy evenness** index (historically related to register-uniformity / **U** workflows) kept for comparison.
+* **No scalar named `registral_density`** is exported; informal “density” usually refers to the concentration heatmap or multiplicity-aware sampling—not a separate dispersion formula.
 * **Pitch-class set, harmony, and global tessitura** as musical conclusions are **out of scope**: the tool only aggregates **absolute MIDI pitch** heights in-band for the configured temporal slices.
+
+Extended discussion: **[docs/METRIC_SEMANTICS.md](docs/METRIC_SEMANTICS.md)** (§12).
 
 ## Copyright and use
 

@@ -3,6 +3,8 @@
 **Tool:** `registral-dispersion` v0.3.0  
 **Purpose:** advised settings for common research setups in symbolic-score registral dispersion analysis:
 
+**Metric definitions and interpretive limits:** [METRIC_SEMANTICS.md](METRIC_SEMANTICS.md)
+
 1. **Static vertical aggregate** — the vertical registral “state” at each moment (or over the whole score), without arbitrary temporal smoothing.
 2. **Moving fragment** — how registral dispersion **evolves** along the score via sliding temporal windows.
 3. **One-number global summary** — duration-weighted whole-score aggregate via `summarize` CLI/API.
@@ -17,7 +19,7 @@ All values below assume **MusicXML / MXL / MIDI** input parsed by **music21**. R
 |--------|---------------------|--------|
 | **Register preset** | **A0–C8 (full notated range)** | Results depend on the band. Normalized columns scale by `R = register_high − register_low`. |
 | **Raw vs normalized** | **Raw semitones** for primary publication; **normalized_*** for cross-score comparison with different register bounds | Normalized values are **not** perceptual brightness. |
-| **Heatmap (complement)** | Always include when exploring register **density** | Independent of dispersion formulas; use **registral_ember** + **log1p_counts**. |
+| **Heatmap (complement)** | Always include when exploring register **notational occupancy** (informal “density”) | Independent of dispersion formulas; use **registral_ember** + **log1p_counts**. See [METRIC_SEMANTICS.md](METRIC_SEMANTICS.md) §7. |
 | **Exports** | Always keep **CSV + JSON** | JSON records `analysis_profile`, `pitch_sampling_mode`, `observation_mode`, formulas, and `package_version`. |
 
 ### Analysis profile (choose one stance)
@@ -67,7 +69,7 @@ Each row describes a **fixed set of sounding pitches** — no moving-window blur
 | **`registral_centroid`** | Where the vertical mass sits (absolute tessitura) |
 | **`registral_std`** | Tight vs loose clustering around the centroid |
 | **`normalized_registral_span`** | Compare segments when register band is fixed |
-| **`occupancy_entropy`** | Optional — bin evenness; **not** dispersion (use only comparatively) |
+| **`occupancy_entropy`** | Optional — bin evenness; **not** dispersion (use only comparatively) | See [METRIC_SEMANTICS.md](METRIC_SEMANTICS.md) §5 |
 
 ### Post-processing: whole-score static summary
 
@@ -349,7 +351,7 @@ Then treat **`mean_pairwise_registral_distance`** as primary in both setups.
 1. Record **`package_version`** from JSON export.  
 2. Archive **exact parameter dict** (this document + your score path).  
 3. State **register band** and **profile** in the paper methods section.  
-4. Distinguish **dispersion metrics** from **occupancy_entropy** and from **heatmap density**.  
+4. Distinguish **dispersion metrics** from **occupancy_entropy** and from **concentration-map notational occupancy** (not acoustic density). See [METRIC_SEMANTICS.md](METRIC_SEMANTICS.md).  
 5. Record **`tie_policy`**, **`global_summary`**, and any **`warnings`** from JSON export.  
 6. Run **`benchmarks/scripts/compare_frozen_outputs.py`** after intentional code changes (synthetic fixtures only).
 
