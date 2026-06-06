@@ -330,5 +330,5 @@ R = register_high_midi − register_low_midi
 
 - [README.md](../README.md) — install, CLI, defaults
 - [PARAMETERIZATION_GUIDE.md](PARAMETERIZATION_GUIDE.md) — advised presets for static, moving, and summarize workflows
-- [benchmarks/README.md](../benchmarks/README.md) — synthetic regression fixtures (not perceptual validation)
+- [REGISTRAL_REGRESSION_FIXTURES.md](REGISTRAL_REGRESSION_FIXTURES.md) — controlled MusicXML fixtures for qualitative metric invariants (Phase 1)
 - Export strings in `src/registral_dispersion/metric_documentation.py` (mirrored in CSV `#` comments and JSON)

@@ -1,0 +1,251 @@
+{
+  "phase": "1_qualitative",
+  "analysis_params": {
+    "observation_mode": "event_boundaries",
+    "analysis_profile": "occupied_space",
+    "register_low": "A0",
+    "register_high": "C8",
+    "time_step": 0.25,
+    "window_size": 4.0,
+    "tie_policy": "as_imported"
+  },
+  "fixtures": [
+    {
+      "fixture": "cluster_middle_register",
+      "path": "corpus\\fixtures\\registral_regression\\cluster_middle_register.musicxml",
+      "rows": [
+        {
+          "t": 1.0,
+          "registral_span": 5.0,
+          "mean_pairwise_registral_distance": 2.833333333333333,
+          "occupancy_entropy": 0.3096247654715364,
+          "active_note_count": 4
+        }
+      ],
+      "span_min": 5.0,
+      "span_max": 5.0,
+      "concentration": {
+        "mean_active_midi": 62.75,
+        "min_active_midi": 60,
+        "max_active_midi": 65
+      }
+    },
+    {
+      "fixture": "high_register_concentration",
+      "path": "corpus\\fixtures\\registral_regression\\high_register_concentration.musicxml",
+      "rows": [
+        {
+          "t": 1.0,
+          "registral_span": 7.0,
+          "mean_pairwise_registral_distance": 4.666666666666666,
+          "occupancy_entropy": 0.24537182128348387,
+          "active_note_count": 3
+        }
+      ],
+      "span_min": 7.0,
+      "span_max": 7.0,
+      "concentration": {
+        "mean_active_midi": 87.66666666666667,
+        "min_active_midi": 84,
+        "max_active_midi": 91
+      }
+    },
+    {
+      "fixture": "low_register_concentration",
+      "path": "corpus\\fixtures\\registral_regression\\low_register_concentration.musicxml",
+      "rows": [
+        {
+          "t": 1.0,
+          "registral_span": 7.0,
+          "mean_pairwise_registral_distance": 4.666666666666666,
+          "occupancy_entropy": 0.24537182128348387,
+          "active_note_count": 3
+        }
+      ],
+      "span_min": 7.0,
+      "span_max": 7.0,
+      "concentration": {
+        "mean_active_midi": 39.666666666666664,
+        "min_active_midi": 36,
+        "max_active_midi": 43
+      }
+    },
+    {
+      "fixture": "registral_contraction",
+      "path": "corpus\\fixtures\\registral_regression\\registral_contraction.musicxml",
+      "rows": [
+        {
+          "t": 0.5,
+          "registral_span": 24.0,
+          "mean_pairwise_registral_distance": 24.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        },
+        {
+          "t": 1.5,
+          "registral_span": 12.0,
+          "mean_pairwise_registral_distance": 12.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        },
+        {
+          "t": 2.5,
+          "registral_span": 7.0,
+          "mean_pairwise_registral_distance": 7.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        },
+        {
+          "t": 3.5,
+          "registral_span": 3.0,
+          "mean_pairwise_registral_distance": 3.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        },
+        {
+          "t": 4.5,
+          "registral_span": 0.0,
+          "mean_pairwise_registral_distance": 0.0,
+          "occupancy_entropy": 0.0,
+          "active_note_count": 1
+        }
+      ],
+      "span_min": 0.0,
+      "span_max": 24.0,
+      "concentration": {
+        "mean_active_midi": 60.44444444444444,
+        "min_active_midi": 48,
+        "max_active_midi": 72
+      }
+    },
+    {
+      "fixture": "registral_expansion",
+      "path": "corpus\\fixtures\\registral_regression\\registral_expansion.musicxml",
+      "rows": [
+        {
+          "t": 0.5,
+          "registral_span": 0.0,
+          "mean_pairwise_registral_distance": 0.0,
+          "occupancy_entropy": 0.0,
+          "active_note_count": 1
+        },
+        {
+          "t": 1.5,
+          "registral_span": 3.0,
+          "mean_pairwise_registral_distance": 3.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        },
+        {
+          "t": 2.5,
+          "registral_span": 7.0,
+          "mean_pairwise_registral_distance": 7.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        },
+        {
+          "t": 3.5,
+          "registral_span": 12.0,
+          "mean_pairwise_registral_distance": 12.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        },
+        {
+          "t": 4.5,
+          "registral_span": 24.0,
+          "mean_pairwise_registral_distance": 24.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        }
+      ],
+      "span_min": 0.0,
+      "span_max": 24.0,
+      "concentration": {
+        "mean_active_midi": 60.44444444444444,
+        "min_active_midi": 48,
+        "max_active_midi": 72
+      }
+    },
+    {
+      "fixture": "same_span_filled_middle",
+      "path": "corpus\\fixtures\\registral_regression\\same_span_filled_middle.musicxml",
+      "rows": [
+        {
+          "t": 1.0,
+          "registral_span": 24.0,
+          "mean_pairwise_registral_distance": 10.666666666666666,
+          "occupancy_entropy": 0.40018420401925203,
+          "active_note_count": 6
+        }
+      ],
+      "span_min": 24.0,
+      "span_max": 24.0,
+      "concentration": {
+        "mean_active_midi": 61.0,
+        "min_active_midi": 48,
+        "max_active_midi": 72
+      }
+    },
+    {
+      "fixture": "same_span_sparse_extremes",
+      "path": "corpus\\fixtures\\registral_regression\\same_span_sparse_extremes.musicxml",
+      "rows": [
+        {
+          "t": 1.0,
+          "registral_span": 24.0,
+          "mean_pairwise_registral_distance": 24.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        }
+      ],
+      "span_min": 24.0,
+      "span_max": 24.0,
+      "concentration": {
+        "mean_active_midi": 60.0,
+        "min_active_midi": 48,
+        "max_active_midi": 72
+      }
+    },
+    {
+      "fixture": "unison_register",
+      "path": "corpus\\fixtures\\registral_regression\\unison_register.musicxml",
+      "rows": [
+        {
+          "t": 1.0,
+          "registral_span": 0.0,
+          "mean_pairwise_registral_distance": 0.0,
+          "occupancy_entropy": 0.0,
+          "active_note_count": 1
+        }
+      ],
+      "span_min": 0.0,
+      "span_max": 0.0,
+      "concentration": {
+        "mean_active_midi": 60.0,
+        "min_active_midi": 60,
+        "max_active_midi": 60
+      }
+    },
+    {
+      "fixture": "wide_bipolar_register",
+      "path": "corpus\\fixtures\\registral_regression\\wide_bipolar_register.musicxml",
+      "rows": [
+        {
+          "t": 1.0,
+          "registral_span": 48.0,
+          "mean_pairwise_registral_distance": 48.0,
+          "occupancy_entropy": 0.1548123827357682,
+          "active_note_count": 2
+        }
+      ],
+      "span_min": 48.0,
+      "span_max": 48.0,
+      "concentration": {
+        "mean_active_midi": 60.0,
+        "min_active_midi": 36,
+        "max_active_midi": 84
+      }
+    }
+  ],
+  "note": "Exploratory only; not golden regression baselines."
+}
