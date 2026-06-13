@@ -131,6 +131,18 @@ pip install -e ".[dev]"
 
 After changing the checked-out version, **reinstall** the editable package so JSON exports report the correct **`package_version`** (from `pyproject.toml`).
 
+## Tests
+
+**CI:** GitHub Actions (`.github/workflows/tests.yml`) on push and pull request.
+
+```bash
+pip install -e ".[dev]"
+python -m pytest tests -q
+python -m pytest tests -q --cov=registral_dispersion --cov-report=term-missing
+```
+
+Typical full suite: **236 passed** (2026-06-10).
+
 ## Run (Gradio UI)
 
 ```bash
